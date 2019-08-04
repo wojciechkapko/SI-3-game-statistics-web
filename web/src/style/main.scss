@@ -1,0 +1,43 @@
+$bg-color-dark: #192039;
+$bg-color-dark-2: #27304d !important;
+$base-color: #c6538c;
+
+.game {
+  .bp3-spinner {
+    width: 98px;
+  }
+}
+
+.bg-dark {
+  background-color: $bg-color-dark-2;
+}
+
+div#root {
+  background: $bg-color-dark;
+  min-height: 100vh;
+}
+
+body {
+  color: #eaeaea;
+}
+
+.bp3-menu a,
+nav a {
+  color: inherit;
+  &:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+
+.pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+}
+
+.bp3-tag {
+  &.active {
+    background: #1fa9ff;
+  }
+}

@@ -1,0 +1,40 @@
+.game .bp3-spinner {
+  width: 98px;
+}
+
+.bg-dark {
+  background-color: #27304d !important;
+}
+
+div#root {
+  background: #192039;
+  min-height: 100vh;
+}
+
+body {
+  color: #eaeaea;
+}
+
+.bp3-menu a,
+nav a {
+  color: inherit;
+}
+
+.bp3-menu a:hover,
+nav a:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.pagination {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+}
+
+.bp3-tag.active {
+  background: #1fa9ff;
+}
+/*# sourceMappingURL=main.css.map */
