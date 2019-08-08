@@ -10,7 +10,7 @@ const DoughnutChart = props => {
 
   const getChartData = async () => {
     const response = await fetch(
-      `http://localhost:5000/api/chart?type=Doughnut`
+      `api/chart?type=Doughnut`
     );
     const data = await response.json();
     changeChartData(data);

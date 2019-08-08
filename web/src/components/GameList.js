@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import Game from "./Game";
 import Pagination from "./Pagination";
 import axios from "axios";
-import { Button, InputGroup } from "@blueprintjs/core";
+import { Button, Card, InputGroup } from "react-bootstrap";
+import jwt_decode from "jwt-decode";
 
 class GameList extends Component {
   state = {
+    userId: null,
     allGames: 0,
     currentGames: [],
     currentPage: null,
@@ -14,29 +16,40 @@ class GameList extends Component {
     query: ""
   };
 
+  getUserGames = id => {
+    console.log(this.state.userId);
+    axios.get(`/api/games?owner_id=${id}&page=1&limit=18`).then(response => {
+      const {
+        current_page: currentPage = null,
+        game_data: currentGames = [],
+        amount: allGames = 0,
+        total_pages: totalPages = null
+      } = response.data;
+      console.log(response.data);
+      this.setState({ currentPage, currentGames, totalPages, allGames });
+    });
+  };
+
   componentDidMount() {
-    axios
-      .get(`http://localhost:5000/api/games?page=1&limit=18&query=all`)
-      .then(response => {
-        const {
-          current_page: currentPage = null,
-          game_data: currentGames = [],
-          amount: allGames = 0,
-          total_pages: totalPages = null
-        } = response.data;
-        this.setState({ currentPage, currentGames, totalPages, allGames });
-      });
+    const token = localStorage.usertoken;
+    const decoded = jwt_decode(token);
+    console.log(decoded);
+    this.setState({ userId: decoded.identity.id });
+    let id = decoded.identity.id;
+    this.getUserGames(id);
   }
 
   onPageChanged = game_data => {
     const { currentPage, totalPages, pageLimit } = game_data;
     let requestUrl = "";
     if (this.state.query === "") {
-      requestUrl = `http://localhost:5000/api/games?page=${currentPage}&limit=${pageLimit}`;
+      requestUrl = `/api/games?owner_id=${
+        this.state.userId
+      }&page=${currentPage}&limit=${pageLimit}`;
     } else {
-      requestUrl = `http://localhost:5000/api/games?page=${currentPage}&limit=${pageLimit}&query=${
-        this.state.query
-      }`;
+      requestUrl = `/api/games?owner_id=${
+        this.state.userId
+      }&page=${currentPage}&limit=${pageLimit}&query=${this.state.query}`;
     }
 
     axios.get(requestUrl).then(response => {
@@ -47,7 +60,11 @@ class GameList extends Component {
 
   searchByTitle = query => {
     axios
-      .get(`http://localhost:5000/api/games?page=1&limit=18&query=${query}`)
+      .get(
+        `/api/games?owner_id=${
+          this.state.userId
+        }&page=1&limit=18&query=${query}`
+      )
       .then(response => {
         const {
           current_page: currentPage = null,
@@ -85,8 +102,15 @@ class GameList extends Component {
   };
   render() {
     const { allGames, currentGames, search } = this.state;
-    
-    if (allGames === 0) return null;
+
+    if (allGames === 0)
+      return (
+        <div className="row">
+          <div className="col-12">
+            <h3>No games to display</h3>
+          </div>
+        </div>
+      );
 
     return (
       <div>
@@ -113,19 +137,21 @@ class GameList extends Component {
                 type="submit"
               />
             </form>
-            <h2>Found {allGames} games</h2>
+            <h1 className="h2 mb-4">Found {allGames} games</h1>
           </div>
         </div>
         <div className="row">
           {currentGames.map(game => (
             <Game
-              key={game.id}
+              id={game.id}
               title={game.title}
               platform={game.platform}
               release_date={game.release_date}
               publisher={game.publisher}
               genre={game.genre}
               global_sales={game.global_sales}
+              cover={game.cover}
+              userId={game.owner_id}
             />
           ))}
         </div>

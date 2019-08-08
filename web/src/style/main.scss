@@ -3,8 +3,8 @@ $bg-color-dark-2: #27304d !important;
 $base-color: #c6538c;
 
 .game {
-  .bp3-spinner {
-    width: 98px;
+  img {
+    width: 150px;
   }
 }
 
@@ -22,12 +22,17 @@ body {
 }
 
 .bp3-menu a,
-nav a {
+nav a,
+.bp3-navbar-group a {
   color: inherit;
   &:hover {
     text-decoration: none;
     color: inherit;
   }
+}
+
+.bp3-navbar-group a {
+  letter-spacing: 0.07rem;
 }
 
 .pagination {
@@ -40,4 +45,78 @@ nav a {
   &.active {
     background: #1fa9ff;
   }
+}
+
+.navbar-brand {
+  font-family: "Fredoka One", cursive;
+}
+
+.fa-gamepad,
+.fa-plus-square,
+.fa-chart-bar,
+.fa-sign-in-alt {
+  --fa-primary-color: #abff6b;
+  --fa-secondary-color: #007bff;
+  --fa-secondary-opacity: 0.8;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.65));
+}
+
+.fa-user-tie,
+.fa-power-off,
+.fa-user-cog {
+  --fa-primary-color: #007bff;
+  --fa-secondary-color: #abff6b;
+  --fa-secondary-opacity: 0.8;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.65));
+}
+
+.Toastify__toast--success {
+  background: #32a752 !important;
+}
+
+.Toastify__toast {
+  font-family: inherit !important;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.spinner-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+}
+
+.dropdown-dark {
+  .dropdown-menu {
+    background-color: $bg-color-dark-2;
+  }
+  .dropdown-item {
+    color: #fff;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    padding: 0.5rem 0.75rem;
+    &:hover {
+      background-color: #4f5f94;
+    }
+  }
+  .dropdown-divider {
+    border-color: #000;
+    margin: 0;
+  }
+}
+
+.navbar {
+  .dropdown-menu {
+    padding: 0;
+  }
+}
+
+.Toastify__close-button {
+  font-family: Arial;
+}
+
+.Toastify__toast-body {
+  margin: auto 1rem !important;
 }

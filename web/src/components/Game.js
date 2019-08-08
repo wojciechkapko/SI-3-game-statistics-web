@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Card, Spinner, Elevation, Tag } from "@blueprintjs/core";
+import React, { Component } from "react";
+import { Button, Card, InputGroup, Badge, Spinner } from "react-bootstrap";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 // export default class Game extends Component {
 //   render() {
@@ -28,53 +30,71 @@ import { Card, Spinner, Elevation, Tag } from "@blueprintjs/core";
 //   }
 // }
 
-const Game = props => {
-  const getCover = async () => {
-    const response = await fetch(
-      `https://chicken-coop.p.rapidapi.com/games/${
-        props.title
-      }?platform=${props.platform.toLowerCase()}`,
-      {
-        method: "GET",
-        headers: {
-          "x-rapidapi-host": "chicken-coop.p.rapidapi.com",
-          "x-rapidapi-key": "7b330b9b4cmshf90d7b5d0444359p1ee342jsn47d77db27529"
-        }
-      }
-    );
-    const gameData = await response.json();
-    setGame(gameData.result);
-  };
-  useEffect(() => {
-    getCover();
-  }, []);
-
-  const [game, setGame] = useState([]);
-  var image;
-  if (game == null || game.image == null) {
-    image = <Spinner intent="primary" size="35" value={null} />;
-  } else {
-    image = <img className="bp3-elevation-1 mr-3" src={game.image} alt="" />;
+class Game extends Component {
+  constructor(props) {
+    super(props);
+    this.id = props.id;
+    this.userId = props.userId;
+    this.key = props.key;
+    this.title = props.title;
+    this.platform = props.platform;
+    this.release_date = props.release_date;
+    this.publisher = props.publisher;
+    this.genre = props.genre;
+    this.global_sales = props.global_sales;
+    this.cover = props.cover;
   }
-  return (
-    <div className="col-4 mb-3">
-      <Card elevation={Elevation.ONE} className="game bp3-dark bg-dark">
-        <div className="d-flex">
-          {image}
-          <div className="d-flex flex-column">
-            <small className="bp3-text-muted">{props.release_date}</small>
-            <h3 className="mt-1">{props.title}</h3>
-            <p>Sold: {props.global_sales} m units</p>
-            <p>{props.genre}</p>
-            <p>{props.platform}</p>
+  removeGameFromDB(e) {
+    e.preventDefault();
+    axios
+      .get(`/api/game/delete?game_id=${this.id}&owner_id=${this.userId}`)
+      .then(response => {
+        const {
+          message: message = "no message",
+          type: type = "error"
+        } = response.data;
+        console.log(response);
+        if (type != "error") {
+          toast.success(message);
+        } else {
+          toast.error(message);
+        }
+      });
+  }
+  render() {
+    return (
+      <div className="col-4 mb-5">
+        <Card className="game bg-transparent border-0">
+          <div className="d-flex">
+            <div className="d-flex flex-column">
+              <a
+                class="badge badge-danger"
+                href="javascript:void(0)"
+                onClick={this.removeGameFromDB.bind(this)}
+              >
+                <i class="fas fa-trash mr-2" />
+                Delete
+              </a>
+              <img class="shadow" src={this.cover} alt="" />
+              <span className="badge badge-primary rounded-0">
+                {this.platform.toUpperCase()}
+              </span>
+            </div>
+
+            <div className="d-flex flex-column px-4">
+              <small className="bp3-text-muted">{this.release_date}</small>
+              <h4>{this.title}</h4>
+              <p>Sold: {this.global_sales} m units</p>
+              <p>{this.genre}</p>
+            </div>
           </div>
-        </div>
-        <Tag intent="primary" className="mt-3">
-          {props.publisher}
-        </Tag>
-      </Card>
-    </div>
-  );
-};
+          <Badge intent="primary" className="mt-3">
+            {this.publisher}
+          </Badge>
+        </Card>
+      </div>
+    );
+  }
+}
 
 export default Game;
