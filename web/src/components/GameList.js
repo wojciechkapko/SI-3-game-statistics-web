@@ -116,27 +116,6 @@ class GameList extends Component {
       <div>
         <div className="row">
           <div className="col-12">
-            <form
-              onSubmit={this.getSearch}
-              className="form-inline mt-3 bp3-dark d-flex"
-            >
-              <InputGroup
-                leftIcon="search"
-                intent="primary"
-                large={true}
-                type="search"
-                aria-label="Search"
-                onChange={this.updateSearch}
-                placeholder="Search..."
-                value={search}
-              />
-              <Button
-                className="ml-3"
-                text="Submit"
-                intent="primary"
-                type="submit"
-              />
-            </form>
             <h1 className="h2 mb-4">Found {allGames} games</h1>
           </div>
         </div>
